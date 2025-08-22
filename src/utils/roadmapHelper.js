@@ -440,13 +440,17 @@ export const getRoadmapNodes = (roadmap) => {
     position: { x: 0, y: 0 },
   });
 
-  roadmap.modules.forEach((module) => {
+  const addModuleNodes = (module) => {
+    // module/submodule node
     nodes.push({
       id: module.id.toString(),
       data: {
         label: module.title,
         description: module.description,
+        status: module.status,
+        difficulty_level: module.difficulty_level,
         video_url: module?.video_url,
+        // keep behavior consistent with previous UI expectations
         lectures: module?.content_md,
         quizzes: module?.quizzes,
         problems: module?.problems,
@@ -457,31 +461,17 @@ export const getRoadmapNodes = (roadmap) => {
       position: { x: 0, y: 0 },
     });
 
-    module.children.forEach((child) => {
-      nodes.push({
-        id: child.id.toString(),
-        data: {
-          label: child.title,
-          description: child.description,
-          video_url: child?.video_url,
-          lectures: child?.content_md,
-          quizzes: child?.quizzes,
-          problems: child?.problems,
-          isLeaf: false,
-          isModule: true,
-          isHeader: false,
-        },
-        position: { x: 0, y: 0 },
-      });
-    });
-
-    module.lectures.forEach((lecture) => {
+    // lecture nodes under this module
+    (module?.lectures || []).forEach((lecture) => {
       nodes.push({
         id: lecture.id.toString(),
         data: {
           label: lecture.title,
           description: lecture.description,
+          status: lecture.status,
+          difficulty_level: lecture.difficulty_level,
           video_url: lecture?.video_url,
+          // use content_md presence as the truthy flag for notes
           lectures: lecture?.content_md,
           quizzes: lecture?.quizzes,
           problems: lecture?.problems,
@@ -492,6 +482,13 @@ export const getRoadmapNodes = (roadmap) => {
         position: { x: 0, y: 0 },
       });
     });
+
+    // recurse into child modules
+    (module?.children || []).forEach((child) => addModuleNodes(child));
+  };
+
+  (roadmap?.modules || []).forEach((module) => {
+    addModuleNodes(module);
   });
 
   return nodes;
@@ -504,35 +501,37 @@ export const getRoadmapNodes = (roadmap) => {
 export const getRoadmapEdges = (roadmap) => {
   const edges = [];
 
-  // Create edges between roadmap and all modules
-  roadmap.modules.forEach((module) => {
+  // Create edges between roadmap and all top-level modules
+  (roadmap?.modules || []).forEach((module) => {
     edges.push({
       id: `${roadmap.id}-${module.id}`,
       source: roadmap.id.toString(),
       target: module.id.toString(),
     });
-  });
 
-  // Create edges between modules and their children
-  roadmap.modules.forEach((module) => {
-    module.children.forEach((child) => {
-      edges.push({
-        id: `${module.id}-${child.id}`,
-        source: module.id.toString(),
-        target: child.id.toString(),
+    const addEdgesRecursively = (parentModule) => {
+      // edges from module to its own lectures
+      (parentModule?.lectures || []).forEach((lecture) => {
+        edges.push({
+          id: `${parentModule.id}-${lecture.id}`,
+          source: parentModule.id.toString(),
+          target: lecture.id.toString(),
+        });
       });
-    });
-  });
 
-  // Create edges between modules and their lectures
-  roadmap.modules.forEach((module) => {
-    module.lectures.forEach((lecture) => {
-      edges.push({
-        id: `${module.id}-${lecture.id}`,
-        source: module.id.toString(),
-        target: lecture.id.toString(),
+      // edges to child modules, and recurse
+      (parentModule?.children || []).forEach((child) => {
+        edges.push({
+          id: `${parentModule.id}-${child.id}`,
+          source: parentModule.id.toString(),
+          target: child.id.toString(),
+        });
+
+        addEdgesRecursively(child);
       });
-    });
+    };
+
+    addEdgesRecursively(module);
   });
 
   return edges;

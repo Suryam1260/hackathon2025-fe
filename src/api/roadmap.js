@@ -1,7 +1,7 @@
 // import { apiRequest } from "@/utils/apiRequest";
 import fetch from 'isomorphic-fetch';
 
-const BASE_URL = 'http://10.0.8.130:3000';
+const BASE_URL = 'http://192.168.3.171:3000';
 
 const token = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3NTU4NzkzOTJ9.QGgZhttrBGvb0WFqODRLk3kkAxnwhFygJTdHe0EtA0g';
 

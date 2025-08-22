@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { Input } from "@/components/ui/input"
 import { Search } from "lucide-react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { createRoadmap, setUserInput } from "@/store/slices/roadmapSlice"
 import { useNavigate } from "react-router-dom"
 
@@ -12,6 +12,7 @@ import {
 } from "lucide-react"
 
 import FrequentData from "./FrequentData"
+// import RoadmapGenerationModal from "../RoadmapGenerationModal"
 
 const FREQUENT_DATA = [
   {
@@ -24,12 +25,14 @@ const FREQUENT_DATA = [
         title: "SQL",
         description: "HTML, CSS, Javascript ...",
         color: "bg-purple-100 border-purple-200 text-purple-800",
+        link: '/roadmap/81'
       },
       {
         id: 2,
         title: "Computer Science",
         description: "Database, servers, APIs...",
         color: "bg-blue-100 border-blue-200 text-blue-800",
+        link: '/roadmap/73'
       },
       {
         id: 3,
@@ -49,18 +52,21 @@ const FREQUENT_DATA = [
         title: "Frontend",
         description: "HTML, CSS, Javascript ...",
         color: "bg-orange-100 border-orange-200 text-orange-800",
+        link: '/roadmap/74'
       },
       {
         id: 2,
         title: "Backend",
         description: "Database, servers, APIs...",
         color: "bg-indigo-100 border-indigo-200 text-indigo-800",
+        link: '/roadmap/76'
       },
       {
         id: 3,
         title: "DevOps",
         description: "Infrastructure, CI/CD ...",
         color: "bg-teal-100 border-teal-200 text-teal-800",
+        link: '/roadmap/77'
       }
     ]
   }
@@ -71,6 +77,8 @@ const HomeSection = () => {
   const [search, setSearch] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const roadmapGeneration = useSelector((state) => state.roadmap.roadmapGeneration);
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
@@ -107,6 +115,7 @@ const HomeSection = () => {
                 handleSubmit(e);
               }
             }}
+            disabled={roadmapGeneration?.status === "generating"}
           />
         </div>
       </div>
@@ -117,6 +126,7 @@ const HomeSection = () => {
           ))
         }
       </div>
+      {/* <RoadmapGenerationModal /> */}
     </div>
   )
 }

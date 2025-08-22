@@ -7,7 +7,7 @@ import {
 import SidebarComponent from "../Sidebar/Sidebar"
 import ScalerLogo from "@/assets/Scaler_NH7.png"
 import HomeSection from "./HomeSection"
-import RoadmapGenerationModal from "./RoadmapGenerationModal"
+
 const Home = () => {
   return (
     <SidebarProvider>
@@ -21,7 +21,6 @@ const Home = () => {
         </header>
         <HomeSection />
       </SidebarInset>
-      <RoadmapGenerationModal />
     </SidebarProvider>
   )
 }

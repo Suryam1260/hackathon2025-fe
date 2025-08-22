@@ -12,6 +12,7 @@ import SidebarComponent from "../Sidebar/Sidebar"
 import ScalerLogo from "@/assets/Scaler_NH7.png"
 import Graph from "./Graph"
 import RoadmapDescription from "./RoadmapDescription"
+import Loader from "../Loader"
 
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -34,7 +35,7 @@ const Roadmap = () => {
 
 
   if (!selectedRoadmap?.title) {
-    return <div>Generating...</div>;
+    return <Loader />;
   }
 
   return (

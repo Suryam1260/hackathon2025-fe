@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { getActionCableConsumer } from "@/lib/cable";
 
-import { setSelectedRoadmap } from "@/store/slices/roadmapSlice";
+import { setSelectedRoadmap, setRoadmapGeneration } from "@/store/slices/roadmapSlice";
 import { useDispatch } from "react-redux";
 
 /**
@@ -39,6 +39,15 @@ const useRoadmapChannel = (roadmapId) => {
         console.log(`[Cable] Message for roadmap_${roadmapId}:`, data);
         console.log('data?.data inside useRoadmapChannel', data?.data);
         dispatch(setSelectedRoadmap(data?.data));
+        if (data?.data?.status === "generating") {
+          dispatch(setRoadmapGeneration({
+            message: "Roadmap generation started",
+            roadmap_id: data?.data.id,
+            status: "generating",
+          }));
+        } else {
+          dispatch(setRoadmapGeneration(null));
+        }
       },
     });
 

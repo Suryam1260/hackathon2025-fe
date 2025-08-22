@@ -8,7 +8,7 @@ export const getActionCableConsumer = () => {
   if (singletonConsumer) return singletonConsumer;
 
   // Adjust to wss:// in production if needed
-  const WEBSOCKET_URL = "ws://10.0.8.130:3000/cable?token=" + token;
+  const WEBSOCKET_URL = "ws://192.168.3.171:3000/cable?token=" + token;
   singletonConsumer = ActionCable.createConsumer(WEBSOCKET_URL);
   return singletonConsumer;
 }; 

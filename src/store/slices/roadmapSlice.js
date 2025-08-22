@@ -37,9 +37,16 @@ export const getRoadmapData = createAsyncThunk(
 
 export const getSelectedRoadmap = createAsyncThunk(
   "roadmap/getSelectedRoadmap",
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetchRoadmapWithId(id);
+      if (response?.status === "generating") {
+        dispatch(setRoadmapGeneration({
+          message: "Roadmap generation started",
+          roadmap_id: response.id,
+          status: "generating",
+        }));
+      }
       return response;
     } catch (error) {
       return rejectWithValue(error?.message || "Failed to fetch roadmap");

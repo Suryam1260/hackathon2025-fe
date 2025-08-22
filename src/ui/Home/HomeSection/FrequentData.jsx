@@ -1,8 +1,12 @@
 import React from 'react'
 
+import { useNavigate } from 'react-router-dom';
+
 const FrequentData = ({
   data,
 }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col gap-6 w-full">
       <div key={data.id} className="flex flex-col gap-4">
@@ -21,6 +25,7 @@ const FrequentData = ({
                 transition-all duration-200 hover:shadow-md hover:scale-105
                 ${card.color}
               `}
+              onClick={() => navigate(card.link)}
             >
               <h4 className="text-base font-semibold">{card.title}</h4>
               <p className="text-sm opacity-80">{card.description}</p>

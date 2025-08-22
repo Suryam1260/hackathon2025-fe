@@ -44,7 +44,6 @@ const getLayoutedElements = (nodes, edges, direction = "TB") => {
 
   nodes.forEach((node) => {
     const nodeWithPosition = dagreGraph.node(node.id);
-    console.log('nodeWithPosition', nodeWithPosition);
     node.targetPosition = isHorizontal ? "left" : "top";
     node.sourcePosition = isHorizontal ? "right" : "bottom";
 
@@ -62,7 +61,6 @@ const Graph = ({ roadmap }) => {
   const navigate = useNavigate();
   const generatedNodes = getRoadmapNodes(roadmap);
   const generatedEdges = getRoadmapEdges(roadmap);
-
 
   // const [nodes, setNodes] = useState([
   //   { id: "1", data: { label: "SQL", description: "Main Topic", status: "completed" }, position: { x: 0, y: 0 } },
@@ -240,7 +238,7 @@ const Graph = ({ roadmap }) => {
                     {/* Video Lecture */}
                     {
                       selectedNode.data.video_url && (
-                        <div className="flex items-center justify-between rounded-md border p-3 hover:bg-muted/40" onClick={() => navigate(selectedNode.data.video_url)}>
+                        <div className="flex items-center justify-between rounded-md border p-3 hover:bg-muted/40" onClick={() => window.open(selectedNode.data.video_url, '_blank')}>
                           <div className="flex items-center gap-3">
                             <div className="flex h-9 w-9 items-center justify-center rounded-md bg-blue-100 text-blue-600">
                               <PlayCircle className="h-5 w-5" />
